@@ -1,0 +1,33 @@
+
+version: 1.0.{build}
+
+branches:
+  only:
+    - master
+
+platform:
+  - x64
+
+cache:
+  - c:\php-dev -> .appveyor.yml
+
+clone_depth: 1
+
+environment:
+  matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      VS_BUILD: vs16
+      PHP_VER: 7.4.7
+      NATIVE: AVX
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      VS_BUILD: vc15
+      PHP_VER: 7.3.20
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      VS_BUILD: vc15
+      PHP_VER: 7.2.32
+
+build_script:
+  - win\build.bat
+
+test_script:
+  - win\test.bat

@@ -1,0 +1,29 @@
+language: php
+sudo: false
+group: stable
+
+branches:
+  only:
+    - master
+
+git:
+  depth: 1
+
+php:
+  - 7.2
+  - 7.3
+  - 7.4
+  - nightly
+
+matrix:
+  allow_failures:
+    - php: nightly
+
+script:
+  # Compile:
+  - phpize
+  - ./configure
+  - make
+
+  # Run tests:
+  - make test
