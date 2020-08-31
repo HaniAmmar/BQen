@@ -43,7 +43,7 @@ PHP_FUNCTION(BQen_Render) {
     }
 
     if (Z_TYPE_P(value) == IS_STRING) {
-        Qentem::JSON::Value qval(Qentem::JSON::Parse(
+        Qentem::Value qval(Qentem::JSON::Parse(
             Z_STRVAL_P(value), static_cast<Qentem::ULong>(Z_STRLEN_P(value))));
 
         Qentem::String temp = Qentem::Template<>::Render(
