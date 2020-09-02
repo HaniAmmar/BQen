@@ -3,6 +3,6 @@
 ARG_ENABLE("bqen", "BQen template rendering module", "yes");
 
 if (PHP_BQEN != 'no') {
-	EXTENSION("bqen", "bqen.cpp", true, "/EHsc /I " + configure_module_dirname + "/qentem/Include");
+	EXTENSION("bqen", "bqen.cpp", true, "/EHsc /arch:AVX2 /I " + configure_module_dirname + "/qentem/Include");
 	AC_DEFINE("HAVE_BQEN", 1, "Have BQen module");
 }
