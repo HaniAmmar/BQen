@@ -26,11 +26,6 @@ A PHP module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engine) libr
 -   Nesting loops
 -   Nesting if conditions
 -   Inline if
--   JIT arithmetic and logic evaluation
--   HTML friendly
--   Familiar looking syntax
--   Simple and easy to use
--   Uses [Qentem::ALE](https://github.com/HaniAmmar/Qentem-Engine/blob/master/Documentation/ALE.md) for safe evaluation.
 
 ## Usage
 
