@@ -26,6 +26,7 @@ A PHP module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engine) libr
 -   Nesting loops
 -   Nesting if conditions
 -   Inline if
+-   Uses SSE2/AXV2/AVX512BW for fast rendering
 
 ## Usage
 
