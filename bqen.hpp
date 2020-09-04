@@ -52,16 +52,17 @@ struct BTree : zval {
         return 0;
     }
 
-    BTree *GetValue(ULong id) const {
+    const BTree *GetValue(ULong id) const {
         if ((Z_TYPE_P(this) == IS_ARRAY) && (Z_ARRVAL_P(this)->nNumUsed > id)) {
-            return static_cast<BTree *>(&(Z_ARRVAL_P(this)->arData + id)->val);
+            return static_cast<const BTree *>(
+                &(Z_ARRVAL_P(this)->arData + id)->val);
         }
 
         return nullptr;
     }
 
-    BTree *GetValue(const char *key, UInt length) const {
-        return static_cast<BTree *>(zend_hash_str_find(
+    const BTree *GetValue(const char *key, UInt length) const {
+        return static_cast<const BTree *>(zend_hash_str_find(
             Z_ARRVAL_P(this), key, static_cast<size_t>(length)));
     }
 
