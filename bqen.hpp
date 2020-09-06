@@ -1,5 +1,5 @@
-#ifndef QENTEM_BQEN_TREE_H_
-#define QENTEM_BQEN_TREE_H_
+#ifndef QENTEM_BQEN_H_
+#define QENTEM_BQEN_H_
 
 namespace BQen {
 
@@ -9,17 +9,7 @@ using Qentem::StringStream;
 using Qentem::UInt;
 using Qentem::ULong;
 
-struct BString : zend_string {
-    inline const char *Char() const noexcept {
-        return ZSTR_VAL(this);
-    }
-
-    inline ULong Length() const noexcept {
-        return static_cast<ULong>(ZSTR_LEN(this));
-    }
-};
-
-struct BTree : zval {
+struct BQ_ZVAL : zval {
     bool IsArray() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
             return (Z_ARRVAL_P(this)->arData->key == nullptr);
@@ -52,52 +42,50 @@ struct BTree : zval {
         return 0;
     }
 
-    const BTree *GetValue(ULong id) const {
+    const BQ_ZVAL *GetValue(ULong id) const {
         if ((Z_TYPE_P(this) == IS_ARRAY) && (Z_ARRVAL_P(this)->nNumUsed > id)) {
-            return static_cast<const BTree *>(
+            return static_cast<const BQ_ZVAL *>(
                 &(Z_ARRVAL_P(this)->arData + id)->val);
         }
 
         return nullptr;
     }
 
-    const BTree *GetValue(const char *key, UInt length) const {
-        return static_cast<const BTree *>(zend_hash_str_find(
+    const BQ_ZVAL *GetValue(const char *key, UInt length) const {
+        return static_cast<const BQ_ZVAL *>(zend_hash_str_find(
             Z_ARRVAL_P(this), key, static_cast<size_t>(length)));
     }
 
-    const BString *GetKey(ULong id) const {
-        if ((Z_TYPE_P(this) == IS_ARRAY) && (Z_ARRVAL_P(this)->nNumUsed > id)) {
-            return static_cast<const BString *>(
-                (Z_ARRVAL_P(this)->arData + id)->key);
+    bool InsertKey(Qentem::StringStream &ss, Qentem::ULong index) const {
+        if ((Z_TYPE_P(this) == IS_ARRAY) &&
+            (Z_ARRVAL_P(this)->nNumUsed > index)) {
+
+            zend_string *zstr = (Z_ARRVAL_P(this)->arData + index)->key;
+            ss.Add(zstr->val, zstr->len);
         }
 
-        return nullptr;
+        return false;
     }
 
-    const char *Char() const noexcept {
+    bool SetCharAndLength(const char *&  key,
+                          Qentem::ULong &length) const noexcept {
         if (Z_TYPE_P(this) == IS_STRING) {
-            return Z_STRVAL_P(this);
+            key    = Z_STRVAL_P(this);
+            length = static_cast<ULong>(Z_STRLEN_P(this));
+
+            return true;
         }
 
-        return nullptr;
-    }
-
-    ULong Length() const noexcept {
-        if (Z_TYPE_P(this) == IS_STRING) {
-            return static_cast<ULong>(Z_STRLEN_P(this));
-        }
-
-        return 0;
+        return false;
     }
 
     bool SetString(String &value) const noexcept {
         switch (Z_TYPE_P(this)) {
-            case IS_STRING: {
-                value = String(Z_STRVAL_P(this),
-                               static_cast<ULong>(Z_STRLEN_P(this)));
-                return true;
-            }
+                // case IS_STRING: {
+                //     value = String(Z_STRVAL_P(this),
+                //                    static_cast<ULong>(Z_STRLEN_P(this)));
+                //     return true;
+                // }
 
             case IS_LONG: {
                 value = Digit::NumberToString(Z_LVAL_P(this), 1);
@@ -110,25 +98,26 @@ struct BTree : zval {
             }
 
             case IS_TRUE: {
-                value = String("true");
+                value = String("true", 4);
                 return true;
             }
 
             case IS_FALSE: {
-                value = String("false");
+                value = String("false", 5);
                 return true;
             }
 
             case IS_NULL: {
-                value = String("null");
+                value = String("null", 4);
                 return true;
             }
 
             default: {
-                value.Clear();
-                return false;
             }
         }
+
+        value.Clear();
+        return false;
     }
 
     bool InsertString(StringStream &ss) const noexcept {
@@ -164,9 +153,10 @@ struct BTree : zval {
             }
 
             default: {
-                return false;
             }
         }
+
+        return false;
     }
 
     double GetNumber() const noexcept {
@@ -180,9 +170,10 @@ struct BTree : zval {
             }
 
             default: {
-                return 0;
             }
         }
+
+        return 0;
     }
 
     bool GetNumber(double &value) const noexcept {
@@ -215,10 +206,11 @@ struct BTree : zval {
             }
 
             default: {
-                value = 0.0;
-                return false;
             }
         }
+
+        value = 0.0;
+        return false;
     }
 };
 

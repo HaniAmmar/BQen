@@ -34,10 +34,9 @@ PHP_FUNCTION(BQen_Render) {
     }
 
     if (Z_TYPE_P(value) == IS_ARRAY) {
-        Qentem::String temp =
-            Qentem::Template<BQen::BTree, BQen::BString>::Render(
-                tempale_str, static_cast<Qentem::ULong>(tempale_str_len),
-                static_cast<const BQen::BTree *>(value));
+        Qentem::String temp = Qentem::Template<BQen::BQ_ZVAL>::Render(
+            tempale_str, static_cast<Qentem::ULong>(tempale_str_len),
+            static_cast<const BQen::BQ_ZVAL *>(value));
 
         RETURN_STRINGL(temp.Char(), temp.Length());
     }

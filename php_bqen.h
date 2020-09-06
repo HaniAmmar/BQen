@@ -6,7 +6,7 @@
 #endif
 
 #define PHP_BQEN_EXTNAME "BQen"
-#define PHP_BQEN_VERSION "1.0.2"
+#define PHP_BQEN_VERSION "1.0.4"
 
 #include "Template.hpp"
 ////////////////////
