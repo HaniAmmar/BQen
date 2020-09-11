@@ -38,7 +38,7 @@ PHP_FUNCTION(BQen_Render) {
             tempale_str, static_cast<Qentem::ULong>(tempale_str_len),
             static_cast<const BQen::BQ_ZVAL *>(value));
 
-        RETURN_STRINGL(temp.Char(), temp.Length());
+        RETURN_STRINGL(temp.Storage(), temp.Length());
     }
 
     if (Z_TYPE_P(value) == IS_STRING) {
@@ -48,7 +48,7 @@ PHP_FUNCTION(BQen_Render) {
         Qentem::String temp = Qentem::Template<>::Render(
             tempale_str, static_cast<Qentem::ULong>(tempale_str_len), &qval);
 
-        RETURN_STRINGL(temp.Char(), temp.Length());
+        RETURN_STRINGL(temp.Storage(), temp.Length());
     }
 
     RETURN_STRINGL(tempale_str, tempale_str_len);

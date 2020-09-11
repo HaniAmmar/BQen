@@ -61,7 +61,7 @@ struct BQ_ZVAL : zval {
             (Z_ARRVAL_P(this)->nNumUsed > index)) {
 
             zend_string *zstr = (Z_ARRVAL_P(this)->arData + index)->key;
-            ss.Add(zstr->val, zstr->len);
+            ss.Insert(zstr->val, zstr->len);
         }
 
         return false;
@@ -123,7 +123,8 @@ struct BQ_ZVAL : zval {
     bool InsertString(StringStream &ss) const noexcept {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
-                ss.Add(Z_STRVAL_P(this), static_cast<ULong>(Z_STRLEN_P(this)));
+                ss.Insert(Z_STRVAL_P(this),
+                          static_cast<ULong>(Z_STRLEN_P(this)));
                 return true;
             }
 
@@ -138,17 +139,17 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_TRUE: {
-                ss.Add("true", 4);
+                ss.Insert("true", 4);
                 return true;
             }
 
             case IS_FALSE: {
-                ss.Add("false", 5);
+                ss.Insert("false", 5);
                 return true;
             }
 
             case IS_NULL: {
-                ss.Add("null", 4);
+                ss.Insert("null", 4);
                 return true;
             }
 
@@ -157,23 +158,6 @@ struct BQ_ZVAL : zval {
         }
 
         return false;
-    }
-
-    double GetNumber() const noexcept {
-        switch (Z_TYPE_P(this)) {
-            case IS_LONG: {
-                return static_cast<double>(Z_LVAL_P(this));
-            }
-
-            case IS_DOUBLE: {
-                return Z_DVAL_P(this);
-            }
-
-            default: {
-            }
-        }
-
-        return 0;
     }
 
     bool GetNumber(double &value) const noexcept {
