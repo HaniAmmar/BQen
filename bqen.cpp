@@ -19,6 +19,8 @@ ZEND_GET_MODULE(bqen)
 #endif
 
 PHP_FUNCTION(BQen_Render) {
+    using QValue = Qentem::Value<char>;
+
     char * tempale_str     = nullptr;
     size_t tempale_str_len = 0;
 
@@ -34,7 +36,7 @@ PHP_FUNCTION(BQen_Render) {
     }
 
     if (Z_TYPE_P(value) == IS_ARRAY) {
-        Qentem::String temp = Qentem::Template<BQen::BQ_ZVAL>::Render(
+        const Qentem::StringStream<char> temp = Qentem::Template::Render(
             tempale_str, static_cast<Qentem::ULong>(tempale_str_len),
             static_cast<const BQen::BQ_ZVAL *>(value));
 
@@ -42,10 +44,10 @@ PHP_FUNCTION(BQen_Render) {
     }
 
     if (Z_TYPE_P(value) == IS_STRING) {
-        Qentem::Value qval(Qentem::JSON::Parse(
-            Z_STRVAL_P(value), static_cast<Qentem::ULong>(Z_STRLEN_P(value))));
+        const QValue qval = Qentem::JSON::Parse(
+            Z_STRVAL_P(value), static_cast<Qentem::ULong>(Z_STRLEN_P(value)));
 
-        Qentem::String temp = Qentem::Template<>::Render(
+        const Qentem::StringStream<char> temp = Qentem::Template::Render(
             tempale_str, static_cast<Qentem::ULong>(tempale_str_len), &qval);
 
         RETURN_STRINGL(temp.Storage(), temp.Length());

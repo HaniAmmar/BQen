@@ -3,9 +3,9 @@
 
 namespace BQen {
 
-using Qentem::Digit;
-using Qentem::String;
-using Qentem::StringStream;
+using Digit        = Qentem::Digit<char>;
+using String       = Qentem::String<char>;
+using StringStream = Qentem::StringStream<char>;
 using Qentem::UInt;
 using Qentem::ULong;
 
@@ -56,7 +56,7 @@ struct BQ_ZVAL : zval {
             Z_ARRVAL_P(this), key, static_cast<size_t>(length)));
     }
 
-    bool InsertKey(Qentem::StringStream &ss, Qentem::ULong index) const {
+    bool InsertKey(StringStream &ss, ULong index) const {
         if ((Z_TYPE_P(this) == IS_ARRAY) &&
             (Z_ARRVAL_P(this)->nNumUsed > index)) {
 
@@ -67,57 +67,37 @@ struct BQ_ZVAL : zval {
         return false;
     }
 
-    bool SetCharAndLength(const char *&  key,
-                          Qentem::ULong &length) const noexcept {
-        if (Z_TYPE_P(this) == IS_STRING) {
-            key    = Z_STRVAL_P(this);
-            length = static_cast<ULong>(Z_STRLEN_P(this));
-
-            return true;
-        }
-
-        return false;
-    }
-
-    bool SetString(String &value) const noexcept {
+    bool SetCharAndLength(const char *&key, ULong &length) const noexcept {
         switch (Z_TYPE_P(this)) {
-                // case IS_STRING: {
-                //     value = String(Z_STRVAL_P(this),
-                //                    static_cast<ULong>(Z_STRLEN_P(this)));
-                //     return true;
-                // }
+            case IS_STRING: {
+                key    = Z_STRVAL_P(this);
+                length = static_cast<ULong>(Z_STRLEN_P(this));
 
-            case IS_LONG: {
-                value = Digit::NumberToString(Z_LVAL_P(this), 1);
-                return true;
-            }
-
-            case IS_DOUBLE: {
-                value = Digit::NumberToString(Z_DVAL_P(this), 1, 0, 14);
                 return true;
             }
 
             case IS_TRUE: {
-                value = String("true", 4);
+                key    = "true";
+                length = 4;
                 return true;
             }
 
             case IS_FALSE: {
-                value = String("false", 5);
+                key    = "false";
+                length = 5;
                 return true;
             }
 
             case IS_NULL: {
-                value = String("null", 4);
+                key    = "null";
+                length = 4;
                 return true;
             }
 
             default: {
+                return false;
             }
         }
-
-        value.Clear();
-        return false;
     }
 
     bool InsertString(StringStream &ss) const noexcept {
@@ -129,12 +109,12 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_LONG: {
-                ss += Digit::NumberToString(Z_LVAL_P(this), 1);
+                Digit::NumberToStringStream(ss, Z_LVAL_P(this), 1);
                 return true;
             }
 
             case IS_DOUBLE: {
-                ss += Digit::NumberToString(Z_DVAL_P(this), 1, 0, 14);
+                Digit::NumberToStringStream(ss, Z_DVAL_P(this), 1, 0, 14);
                 return true;
             }
 
@@ -154,10 +134,9 @@ struct BQ_ZVAL : zval {
             }
 
             default: {
+                return false;
             }
         }
-
-        return false;
     }
 
     bool GetNumber(double &value) const noexcept {
@@ -190,11 +169,10 @@ struct BQ_ZVAL : zval {
             }
 
             default: {
+                value = 0.0;
+                return false;
             }
         }
-
-        value = 0.0;
-        return false;
     }
 };
 
