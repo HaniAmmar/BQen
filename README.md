@@ -22,11 +22,11 @@ A PHP module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engine) libr
 
 ## Features
 
+-   Fast HTML templating
 -   Variable replacement
--   Nesting loops
--   Nesting if conditions
+-   nested loop
+-   nested if condition
 -   Inline if
--   Uses SSE2/AXV2/AVX512BW for fast rendering
 
 ## Usage
 
