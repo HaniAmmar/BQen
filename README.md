@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/HaniAmmar/BQen.svg?branch=master)](https://travis-ci.org/HaniAmmar/BQen)
+[![Build Status](https://travis-ci.com/HaniAmmar/BQen.svg?branch=master)](https://travis-ci.com/HaniAmmar/BQen)
 [![Build status](https://ci.appveyor.com/api/projects/status/e2w6byu98k4kg804/branch/master?svg=true)](https://ci.appveyor.com/project/HaniAmmar/bqen/branch/master)
 
 # BQen
