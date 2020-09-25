@@ -5,43 +5,39 @@ BQen_Render() tests
 --FILE--
 <?php
 
-$list1 = array(
-    'v1' =>  null,
-    'v2' =>  false,
-    'v3' =>  true,
-    'v4' =>  13.8,
-    'v5' =>  105,
-    'v6' =>  'Qen',
-);
+$list1 = '{"numbers":[1,2,3,4,5,6,7,8],"eq":"((1+2)^3)/2","qen":"Qentem"}';
 
-$list2 = array(
-    0 =>  'Qen',
-    1 =>  105,
-    2 =>  13.8,
-    3 =>  true,
-    4 =>  false,
-    5 =>  null,
-);
+$content1 = '
+<loop set="numbers" value="this_number">
+<if case="(this_number % 2) == 1">this_number is an odd number.</if></loop>
 
-$content5 = '<loop key="[id]" value="[val]">
-[id] [val]</loop>';
+{var:eq} = {math: {var:eq}}
 
-echo BQen_Render($content5, $list1). "\n";
-echo BQen_Render($content5, $list2). "\n";
+(0.1 + 0.2) is {math:   0.1   +   0.2  }
+
+{if case="{var:qen} == Qentem" true="{var:qen}"} Engine
+
+{if case="{var:numbers[0]} == {var:numbers[4]}" false="it\'s not {var:numbers[4]}!"}
+';
+
+echo BQen_Render($content1, $list1) . "\n";
 
 ?>
 --EXPECTF--
 
-v1 null
-v2 false
-v3 true
-v4 13.8
-v5 105
-v6 Qen
+1 is an odd number.
 
-0 Qen
-1 105
-2 13.8
-3 true
-4 false
-5 null
+3 is an odd number.
+
+5 is an odd number.
+
+7 is an odd number.
+
+
+((1+2)^3)/2 = 13.5
+
+(0.1 + 0.2) is 0.3
+
+Qentem Engine
+
+it's not 5!

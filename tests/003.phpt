@@ -5,43 +5,27 @@ BQen_Render() tests
 --FILE--
 <?php
 
-$list1 = array(
-    'v1' =>  null,
-    'v2' =>  false,
-    'v3' =>  true,
-    'v4' =>  13.8,
-    'v5' =>  105,
-    'v6' =>  'Qen',
-);
+$list1 = array(0,1);
+$list2 = array('a'=>'A');
 
-$list2 = array(
-    0 =>  'Qen',
-    1 =>  105,
-    2 =>  13.8,
-    3 =>  true,
-    4 =>  false,
-    5 =>  null,
-);
+$content1 = '
+{var:5}
+{var:100}
+{var:W}
+{var:T}';
 
-$content3 = '<loop key="[id]">
-[id]</loop>';
-
-echo BQen_Render($content3, $list1). "\n";
-echo BQen_Render($content3, $list2). "\n";
+echo BQen_Render($content1, $list1) . "\n";
+echo BQen_Render($content1, $list2) . "\n";
 
 ?>
 --EXPECTF--
 
-v1
-v2
-v3
-v4
-v5
-v6
+{var:5}
+{var:100}
+{var:W}
+{var:T}
 
-0
-1
-2
-3
-4
-5
+{var:5}
+{var:100}
+{var:W}
+{var:T}

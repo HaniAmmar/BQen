@@ -10,7 +10,7 @@ using Qentem::UInt;
 using Qentem::ULong;
 
 struct BQ_ZVAL : zval {
-    bool IsArray() const noexcept {
+    inline bool IsArray() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
             return (Z_ARRVAL_P(this)->arData->key == nullptr);
         }
@@ -18,7 +18,7 @@ struct BQ_ZVAL : zval {
         return false;
     }
 
-    bool IsObject() const noexcept {
+    inline bool IsObject() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
             return (Z_ARRVAL_P(this)->arData->key != nullptr);
         }
@@ -34,15 +34,15 @@ struct BQ_ZVAL : zval {
         return ((Z_TYPE_P(this) == IS_LONG) || (Z_TYPE_P(this) == IS_DOUBLE));
     }
 
-    ULong Size() const noexcept {
+    inline ULong Size() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
-            return static_cast<ULong>(Z_ARRVAL_P(this)->nNumUsed);
+            return Z_ARRVAL_P(this)->nNumUsed;
         }
 
         return 0;
     }
 
-    const BQ_ZVAL *GetValue(ULong id) const {
+    inline const BQ_ZVAL *GetValue(ULong id) const {
         if ((Z_TYPE_P(this) == IS_ARRAY) && (Z_ARRVAL_P(this)->nNumUsed > id)) {
             return static_cast<const BQ_ZVAL *>(
                 &(Z_ARRVAL_P(this)->arData + id)->val);
@@ -52,26 +52,16 @@ struct BQ_ZVAL : zval {
     }
 
     const BQ_ZVAL *GetValue(const char *key, UInt length) const {
-        return static_cast<const BQ_ZVAL *>(zend_hash_str_find(
-            Z_ARRVAL_P(this), key, static_cast<size_t>(length)));
+        return static_cast<const BQ_ZVAL *>(
+            zend_hash_str_find(Z_ARRVAL_P(this), key, length));
     }
 
-    bool InsertKey(StringStream &ss, ULong index) const {
-        if ((Z_TYPE_P(this) == IS_ARRAY) &&
-            (Z_ARRVAL_P(this)->nNumUsed > index)) {
-
-            zend_string *zstr = (Z_ARRVAL_P(this)->arData + index)->key;
-            ss.Insert(zstr->val, zstr->len);
-        }
-
-        return false;
-    }
-
-    bool SetCharAndLength(const char *&key, ULong &length) const noexcept {
+    template <typename Number_T_>
+    bool SetCharAndLength(const char *&key, Number_T_ &length) const noexcept {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
                 key    = Z_STRVAL_P(this);
-                length = static_cast<ULong>(Z_STRLEN_P(this));
+                length = static_cast<Number_T_>(Z_STRLEN_P(this));
 
                 return true;
             }
@@ -103,8 +93,7 @@ struct BQ_ZVAL : zval {
     bool InsertString(StringStream &ss) const noexcept {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
-                ss.Insert(Z_STRVAL_P(this),
-                          static_cast<ULong>(Z_STRLEN_P(this)));
+                ss.Insert(Z_STRVAL_P(this), Z_STRLEN_P(this));
                 return true;
             }
 
@@ -169,7 +158,6 @@ struct BQ_ZVAL : zval {
             }
 
             default: {
-                value = 0.0;
                 return false;
             }
         }
