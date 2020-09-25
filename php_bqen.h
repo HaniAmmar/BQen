@@ -8,6 +8,10 @@
 #define PHP_BQEN_EXTNAME "BQen"
 #define PHP_BQEN_VERSION "1.2.0"
 
+#define QENTEM_AVX512BW_ 1
+#define QENTEM_AVX2_ 1
+#define QENTEM_SSE2_ 1
+
 #include "JSON.hpp"
 #include "Template.hpp"
 ////////////////////
