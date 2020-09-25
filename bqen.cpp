@@ -46,8 +46,8 @@ PHP_FUNCTION(BQen_Render) {
                                      &template_ss);
         }
 
-        RETURN_STRINGL(template_ss.First(), template_ss.Length())
+        RETURN_STRINGL(template_ss.First(), template_ss.Length());
     }
 
-    RETURN_BOOL(false)
+    RETURN_BOOL(false);
 }
