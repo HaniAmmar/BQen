@@ -128,7 +128,7 @@ struct BQ_ZVAL : zval {
         }
     }
 
-    bool GetNumber(double &value) const noexcept {
+    bool SetNumber(double &value) const noexcept {
         switch (Z_TYPE_P(this)) {
             case IS_LONG: {
                 value = static_cast<double>(Z_LVAL_P(this));
