@@ -6,8 +6,7 @@ namespace BQen {
 using Digit        = Qentem::Digit<char>;
 using String       = Qentem::String<char>;
 using StringStream = Qentem::StringStream<char>;
-using Qentem::UInt;
-using Qentem::ULong;
+using Qentem::SizeT;
 
 struct BQ_ZVAL : zval {
     inline bool IsArray() const noexcept {
@@ -34,7 +33,7 @@ struct BQ_ZVAL : zval {
         return ((Z_TYPE_P(this) == IS_LONG) || (Z_TYPE_P(this) == IS_DOUBLE));
     }
 
-    inline ULong Size() const noexcept {
+    inline SizeT Size() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
             return Z_ARRVAL_P(this)->nNumUsed;
         }
@@ -42,7 +41,7 @@ struct BQ_ZVAL : zval {
         return 0;
     }
 
-    inline const BQ_ZVAL *GetValue(ULong id) const {
+    inline const BQ_ZVAL *GetValue(SizeT id) const {
         if ((Z_TYPE_P(this) == IS_ARRAY) && (Z_ARRVAL_P(this)->nNumUsed > id)) {
             return static_cast<const BQ_ZVAL *>(
                 &(Z_ARRVAL_P(this)->arData + id)->val);
@@ -51,7 +50,7 @@ struct BQ_ZVAL : zval {
         return nullptr;
     }
 
-    const BQ_ZVAL *GetValue(const char *key, UInt length) const {
+    const BQ_ZVAL *GetValue(const char *key, SizeT length) const {
         return static_cast<const BQ_ZVAL *>(
             zend_hash_str_find(Z_ARRVAL_P(this), key, length));
     }
@@ -128,32 +127,33 @@ struct BQ_ZVAL : zval {
         }
     }
 
-    bool SetNumber(double &value) const noexcept {
+    template <typename Number_T_>
+    bool SetNumber(Number_T_ &value) const noexcept {
         switch (Z_TYPE_P(this)) {
             case IS_LONG: {
-                value = static_cast<double>(Z_LVAL_P(this));
+                value = static_cast<Number_T_>(Z_LVAL_P(this));
                 return true;
             }
 
             case IS_DOUBLE: {
-                value = Z_DVAL_P(this);
+                value = static_cast<Number_T_>(Z_DVAL_P(this));
                 return true;
             }
 
             case IS_STRING: {
                 return Digit::StringToNumber(
                     value, Z_STRVAL_P(this),
-                    static_cast<UInt>(Z_STRLEN_P(this)));
+                    static_cast<SizeT>(Z_STRLEN_P(this)));
             }
 
             case IS_TRUE: {
-                value = 1.0;
+                value = 1;
                 return true;
             }
 
             case IS_NULL:
             case IS_FALSE: {
-                value = 0.0;
+                value = 0;
                 return true;
             }
 
