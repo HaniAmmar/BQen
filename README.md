@@ -23,10 +23,14 @@ A PHP module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engine) libr
 
 ## Features
 
--   Variable replacement
--   nested loop
--   nested if condition
--   Inline if
+-   Fast template rendering.
+-   Low memory usage.
+-   Safe evaluation.
+-   Variable replacement.
+-   Nested loop.
+-   Nested if condition.
+-   Inline if.
+-   Math tag.
 
 ## Usage
 
