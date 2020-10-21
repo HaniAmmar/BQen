@@ -9,6 +9,8 @@ using StringStream = Qentem::StringStream<char>;
 using Qentem::SizeT;
 
 struct BQ_ZVAL : zval {
+    using JSONotation_T_ = Qentem::JSON::JSONotation<char>;
+
     inline bool IsArray() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
             return (Z_ARRVAL_P(this)->arData->key == nullptr);
@@ -66,20 +68,20 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_TRUE: {
-                key    = "true";
-                length = 4;
+                key    = JSONotation_T_::GetTrueString();
+                length = JSONotation_T_::TrueStringLength;
                 return true;
             }
 
             case IS_FALSE: {
-                key    = "false";
-                length = 5;
+                key    = JSONotation_T_::GetFalseString();
+                length = JSONotation_T_::FalseStringLength;
                 return true;
             }
 
             case IS_NULL: {
-                key    = "null";
-                length = 4;
+                key    = JSONotation_T_::GetNullString();
+                length = JSONotation_T_::NullStringLength;
                 return true;
             }
 
@@ -107,17 +109,20 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_TRUE: {
-                ss.Insert("true", 4);
+                ss.Insert(JSONotation_T_::GetTrueString(),
+                          JSONotation_T_::TrueStringLength);
                 return true;
             }
 
             case IS_FALSE: {
-                ss.Insert("false", 5);
+                ss.Insert(JSONotation_T_::GetFalseString(),
+                          JSONotation_T_::FalseStringLength);
                 return true;
             }
 
             case IS_NULL: {
-                ss.Insert("null", 4);
+                ss.Insert(JSONotation_T_::GetNullString(),
+                          JSONotation_T_::NullStringLength);
                 return true;
             }
 
