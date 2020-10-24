@@ -43,18 +43,45 @@ struct BQ_ZVAL : zval {
         return 0;
     }
 
-    inline const BQ_ZVAL *GetValue(SizeT id) const {
-        if ((Z_TYPE_P(this) == IS_ARRAY) && (Z_ARRVAL_P(this)->nNumUsed > id)) {
-            return static_cast<const BQ_ZVAL *>(
-                &(Z_ARRVAL_P(this)->arData + id)->val);
+    inline const BQ_ZVAL *GetValue(SizeT index) const {
+        if ((Z_TYPE_P(this) == IS_ARRAY) &&
+            (Z_ARRVAL_P(this)->nNumUsed > index)) {
+            const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
+
+            if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
+                return static_cast<const BQ_ZVAL *>(val);
+            }
         }
 
         return nullptr;
     }
 
     const BQ_ZVAL *GetValue(const char *key, SizeT length) const {
-        return static_cast<const BQ_ZVAL *>(
-            zend_hash_str_find(Z_ARRVAL_P(this), key, length));
+        if (Z_TYPE_P(this) == IS_ARRAY) {
+            if (Z_ARRVAL_P(this)->arData->key != nullptr) {
+                const zval *val =
+                    zend_hash_str_find(Z_ARRVAL_P(this), key, length);
+
+                if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
+                    return static_cast<const BQ_ZVAL *>(val);
+                }
+
+                return nullptr;
+            }
+
+            SizeT index;
+
+            if ((Digit::StringToNumber(index, key, length)) &&
+                (Z_ARRVAL_P(this)->nNumUsed > index)) {
+                const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
+
+                if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
+                    return static_cast<const BQ_ZVAL *>(val);
+                }
+            }
+        }
+
+        return nullptr;
     }
 
     template <typename Number_T_>
