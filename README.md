@@ -27,7 +27,7 @@ A PHP module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engine) libr
 -   Low memory usage.
 -   Safe evaluation.
 -   Variable replacement.
--   Nested loop.
+-   Nested loop (with data grouping and sorting).
 -   Nested if condition.
 -   Inline if.
 -   Math tag.
