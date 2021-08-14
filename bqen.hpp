@@ -61,7 +61,6 @@ struct BQ_ZVAL : zval {
             if (Z_ARRVAL_P(this)->arData->key != nullptr) {
                 const zval *val =
                     zend_hash_str_find(Z_ARRVAL_P(this), key, length);
-
                 if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
                     return static_cast<const BQ_ZVAL *>(val);
                 }
@@ -82,6 +81,22 @@ struct BQ_ZVAL : zval {
         }
 
         return nullptr;
+    }
+
+    template <typename Number_T_>
+    bool SetKeyCharAndLength(SizeT index, const char *&key,
+                             Number_T_ &length) const noexcept {
+        if ((Z_TYPE_P(this) == IS_ARRAY) &&
+            (Z_ARRVAL_P(this)->arData->key != nullptr) &&
+            (Z_ARRVAL_P(this)->nNumUsed > index)) {
+            const zend_string *val = (Z_ARRVAL_P(this)->arData + index)->key;
+
+            key    = val->val;
+            length = val->len;
+            return true;
+        }
+
+        return false;
     }
 
     template <typename Number_T_>
@@ -193,6 +208,17 @@ struct BQ_ZVAL : zval {
                 return false;
             }
         }
+    }
+
+    template <typename Number_T_>
+    bool GroupBy(zval &groupedValue, const char *key,
+                 const Number_T_ length) const noexcept {
+        // It's easier to do it using PHP code.
+        return false;
+    }
+
+    void Sort(bool ascend = true) {
+        // It's easier to do it using PHP code.
     }
 };
 
