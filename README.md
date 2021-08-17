@@ -35,7 +35,11 @@ A PHP module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engine) libr
 
 ## Usage
 
-Store the template content in a string variable, and the substituting values in an array or a JSON string, then pass them to **BQen_Render(string, array|string)** and it will return a string containing the final result.
+Templates' content should be stored in a string variable, and the substituting values in an array or a JSON string, then pass them to **BQen_Render(string, array|string)** and it will return a string containing the final result.
+
+### Live Test
+
+Templates can be tested live @ [JQen Tool](https://haniammar.github.io/JQen-Tool)
 
 ### Variable
 
