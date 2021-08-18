@@ -14,6 +14,7 @@
 #include "JSON.hpp"
 #include "Template.hpp"
 ////////////////////
+#include <new>
 #include <php.h>
 ///////////////////
 #include "bqen.hpp"
