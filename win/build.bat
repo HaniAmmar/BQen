@@ -13,18 +13,18 @@ if "%PHP_CONFIG%" equ "" (
                     --enable-bqen=shared
 )
 
-rem PHP version number
+@REM PHP version number
 if "%PHP_VER%" equ ""        set PHP_VER=7.4.3
 if "%PHP_SDK_VER%" equ ""    set PHP_SDK_VER=2.2.0
-rem Set to zero to disable Thread safe
+@REM Set to zero to disable Thread safe
 if "%PHP_IS_TS%" equ ""      set PHP_IS_TS=1
 if "%VS_BUILD%" equ ""       set VS_BUILD=vs16
 if "%WIN_PLATFORM%" equ ""   set WIN_PLATFORM=x64
 if "%BUILD_TYPE%" equ ""     set BUILD_TYPE=Release
 
-REM set INSTALL_PHP=1
-REM set GET_PHP_DEP=1
-REM set NATIVE=AVX
+@REM set INSTALL_PHP=1
+@REM set GET_PHP_DEP=1
+@REM set NATIVE=AVX
 
 set PHP_DEP_BRANCH=master
 
@@ -120,6 +120,6 @@ cmd /C %PHP_SDK_DIR%\phpsdk-%VS_BUILD%-%WIN_PLATFORM%.bat -t %BUILD_TASK%
 
 if "%AFTER_BUILD%" neq "" cmd /C %AFTER_BUILD%
 
-REM cmd /C win\test
+@REM cmd /C win\test
 
 exit /B %errorlevel%
