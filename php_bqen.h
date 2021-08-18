@@ -11,12 +11,16 @@
 #define QENTEM_AVX2 1
 #define QENTEM_SSE2 1
 
+#include <php.h>
+
+#define QENTEM_SIZE_T
+namespace Qentem {
+using SizeT = size_t;
+}
+
+#include <new>
 #include "JSON.hpp"
 #include "Template.hpp"
-////////////////////
-#include <new>
-#include <php.h>
-///////////////////
 #include "bqen.hpp"
 
 extern zend_module_entry bqen_module_entry;

@@ -83,9 +83,8 @@ struct BQ_ZVAL : zval {
         return nullptr;
     }
 
-    template <typename Number_T_>
-    bool SetKeyCharAndLength(Number_T_ index, const char *&key,
-                             Number_T_ &length) const noexcept {
+    bool SetKeyCharAndLength(SizeT index, const char *&key,
+                             SizeT &length) const noexcept {
         if ((Z_TYPE_P(this) == IS_ARRAY) &&
             (Z_ARRVAL_P(this)->arData->key != nullptr) &&
             (Z_ARRVAL_P(this)->nNumUsed > index)) {
@@ -99,12 +98,11 @@ struct BQ_ZVAL : zval {
         return false;
     }
 
-    template <typename Number_T_>
-    bool SetCharAndLength(const char *&key, Number_T_ &length) const noexcept {
+    bool SetCharAndLength(const char *&key, SizeT &length) const noexcept {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
                 key    = Z_STRVAL_P(this);
-                length = static_cast<Number_T_>(Z_STRLEN_P(this));
+                length = Z_STRLEN_P(this);
 
                 return true;
             }
@@ -188,9 +186,8 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_STRING: {
-                return Digit::StringToNumber(
-                    value, Z_STRVAL_P(this),
-                    static_cast<SizeT>(Z_STRLEN_P(this)));
+                return Digit::StringToNumber(value, Z_STRVAL_P(this),
+                                             Z_STRLEN_P(this));
             }
 
             case IS_TRUE: {
@@ -210,9 +207,8 @@ struct BQ_ZVAL : zval {
         }
     }
 
-    template <typename Number_T_>
     bool GroupBy(zval &groupedValue, const char *key,
-                 const Number_T_ length) const noexcept {
+                 const SizeT length) const noexcept {
         // It's easier to do it using PHP code.
         (void)groupedValue;
         (void)key;

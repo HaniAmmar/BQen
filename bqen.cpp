@@ -24,9 +24,9 @@ PHP_FUNCTION(BQen_Render) {
     static Qentem::StringStream<char> template_ss;
     static QTagBit                    tags_cache;
 
-    size_t template_str_len = 0;
-    char * template_str     = nullptr;
-    zval * value            = nullptr;
+    Qentem::SizeT template_str_len = 0;
+    char *        template_str     = nullptr;
+    zval *        value            = nullptr;
 
     ZEND_PARSE_PARAMETERS_START(2, 2)
     Z_PARAM_STRING(template_str, template_str_len)
