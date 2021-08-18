@@ -84,7 +84,7 @@ struct BQ_ZVAL : zval {
     }
 
     template <typename Number_T_>
-    bool SetKeyCharAndLength(SizeT index, const char *&key,
+    bool SetKeyCharAndLength(Number_T_ index, const char *&key,
                              Number_T_ &length) const noexcept {
         if ((Z_TYPE_P(this) == IS_ARRAY) &&
             (Z_ARRVAL_P(this)->arData->key != nullptr) &&
@@ -214,10 +214,14 @@ struct BQ_ZVAL : zval {
     bool GroupBy(zval &groupedValue, const char *key,
                  const Number_T_ length) const noexcept {
         // It's easier to do it using PHP code.
+        (void)groupedValue;
+        (void)key;
+        (void)length;
         return false;
     }
 
     void Sort(bool ascend = true) {
+        (void)ascend;
         // It's easier to do it using PHP code.
     }
 };
