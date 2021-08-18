@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.com/HaniAmmar/BQen.svg?branch=master)](https://travis-ci.com/HaniAmmar/BQen)
-[![Build status](https://ci.appveyor.com/api/projects/status/e2w6byu98k4kg804/branch/master?svg=true)](https://ci.appveyor.com/project/HaniAmmar/bqen/branch/master)
+[![Build Status](https://travis-ci.com/HaniAmmar/BQen.svg?branch=main)](https://travis-ci.com/HaniAmmar/BQen)
+[![Build status](https://ci.appveyor.com/api/projects/status/e2w6byu98k4kg804/branch/main?svg=true)](https://ci.appveyor.com/project/HaniAmmar/bqen/branch/main)
 
 # BQen
 
@@ -257,7 +257,7 @@ echo BQen_Render($template, json_decode($json_string, true));
 
 ## Reference
 
-Syntax @ [Qentem-Engine/Template.md](https://github.com/HaniAmmar/Qentem-Engine/blob/master/Documentation/Template.md).
+Syntax @ [Qentem-Engine/Template.md](https://github.com/HaniAmmar/Qentem-Engine/blob/main/Documentation/Template.md).
 
 ## Requirements
 

@@ -4,7 +4,7 @@ group: stable
 
 branches:
   only:
-    - master
+    - main
 
 git:
   depth: 1
