@@ -131,7 +131,7 @@ struct BQ_ZVAL : zval {
         }
     }
 
-    bool InsertString(StringStream &ss) const noexcept {
+    bool InsertStringInto(StringStream &ss) const noexcept {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
                 ss.Insert(Z_STRVAL_P(this), Z_STRLEN_P(this));
