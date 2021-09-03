@@ -27,8 +27,8 @@ A PHP module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engine) libr
 -   Fast template rendering.
 -   Low memory usage.
 -   Safe evaluation.
--   Variable replacement with auto-escaping.
--   Raw variable replacement **without** auto-escaping.
+-   Variable replacement with HTML auto-escape.
+-   Raw variable replacement **without** HTML auto-escape.
 -   Nested loop (with data grouping and sorting).
 -   Nested if condition.
 -   Inline if.
