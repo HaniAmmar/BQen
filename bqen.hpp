@@ -28,7 +28,6 @@ struct BQ_ZVAL : zval {
     }
 
     inline bool IsString() const noexcept { return (Z_TYPE_P(this) == IS_STRING); }
-
     inline bool IsNumber() const noexcept { return ((Z_TYPE_P(this) == IS_LONG) || (Z_TYPE_P(this) == IS_DOUBLE)); }
 
     inline SizeT Size() const noexcept {
