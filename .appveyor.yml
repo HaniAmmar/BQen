@@ -17,14 +17,14 @@ environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       VS_BUILD: vs16
-      PHP_VER: 8.2.1
-      NATIVE: AVX
+      PHP_VER: 7.4.33
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+      VS_BUILD: vs16
+      PHP_VER: 8.0.26
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       VS_BUILD: vs16
       PHP_VER: 8.1.14
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-      VS_BUILD: vs16
-      PHP_VER: 7.4.33
+      NATIVE: AVX
 
 build_script:
   - win\build.bat
