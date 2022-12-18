@@ -109,14 +109,13 @@ echo if %errorlevel% neq 0 exit /B 2 >> %BUILD_TASK%
 echo cmd /C nmake /NOLOGO >> %BUILD_TASK%
 echo if %errorlevel% neq 0 exit /B 2 >> %BUILD_TASK%
 
+if "%%" equ "1" (
+    echo cmd /C nmake install >> %BUILD_TASK%
+)
+
 echo.
 echo Building
 cmd /C %PHP_SDK_DIR%\phpsdk-%VS_BUILD%-%WIN_PLATFORM%.bat -t %BUILD_TASK%
-
-if "%INSTALL_PHP%" equ "1" (
-    echo Installing PHP
-    echo cmd /C nmake install >> %BUILD_TASK%
-)
 
 if "%AFTER_BUILD1%" neq "" cmd /C %AFTER_BUILD1%
 if "%AFTER_BUILD2%" neq "" cmd /C %AFTER_BUILD2%
