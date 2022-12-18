@@ -27,13 +27,9 @@ struct BQ_ZVAL : zval {
         return false;
     }
 
-    inline bool IsString() const noexcept {
-        return (Z_TYPE_P(this) == IS_STRING);
-    }
+    inline bool IsString() const noexcept { return (Z_TYPE_P(this) == IS_STRING); }
 
-    inline bool IsNumber() const noexcept {
-        return ((Z_TYPE_P(this) == IS_LONG) || (Z_TYPE_P(this) == IS_DOUBLE));
-    }
+    inline bool IsNumber() const noexcept { return ((Z_TYPE_P(this) == IS_LONG) || (Z_TYPE_P(this) == IS_DOUBLE)); }
 
     inline SizeT Size() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
@@ -44,8 +40,7 @@ struct BQ_ZVAL : zval {
     }
 
     inline const BQ_ZVAL *GetValue(SizeT index) const {
-        if ((Z_TYPE_P(this) == IS_ARRAY) &&
-            (Z_ARRVAL_P(this)->nNumUsed > index)) {
+        if ((Z_TYPE_P(this) == IS_ARRAY) && (Z_ARRVAL_P(this)->nNumUsed > index)) {
             const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
 
             if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
@@ -59,8 +54,7 @@ struct BQ_ZVAL : zval {
     const BQ_ZVAL *GetValue(const char *key, SizeT length) const {
         if (Z_TYPE_P(this) == IS_ARRAY) {
             if (Z_ARRVAL_P(this)->arData->key != nullptr) {
-                const zval *val =
-                    zend_hash_str_find(Z_ARRVAL_P(this), key, length);
+                const zval *val = zend_hash_str_find(Z_ARRVAL_P(this), key, length);
                 if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
                     return static_cast<const BQ_ZVAL *>(val);
                 }
@@ -70,8 +64,7 @@ struct BQ_ZVAL : zval {
 
             SizeT index;
 
-            if ((Digit::StringToNumber(index, key, length)) &&
-                (Z_ARRVAL_P(this)->nNumUsed > index)) {
+            if ((Digit::StringToNumber(index, key, length)) && (Z_ARRVAL_P(this)->nNumUsed > index)) {
                 const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
 
                 if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
@@ -83,10 +76,8 @@ struct BQ_ZVAL : zval {
         return nullptr;
     }
 
-    bool SetKeyCharAndLength(SizeT index, const char *&key,
-                             SizeT &length) const noexcept {
-        if ((Z_TYPE_P(this) == IS_ARRAY) &&
-            (Z_ARRVAL_P(this)->arData->key != nullptr) &&
+    bool SetKeyCharAndLength(SizeT index, const char *&key, SizeT &length) const noexcept {
+        if ((Z_TYPE_P(this) == IS_ARRAY) && (Z_ARRVAL_P(this)->arData->key != nullptr) &&
             (Z_ARRVAL_P(this)->nNumUsed > index)) {
             const zend_string *val = (Z_ARRVAL_P(this)->arData + index)->key;
 
@@ -149,20 +140,17 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_TRUE: {
-                ss.Insert(JSONotation_T_::GetTrueString(),
-                          JSONotation_T_::TrueStringLength);
+                ss.Insert(JSONotation_T_::GetTrueString(), JSONotation_T_::TrueStringLength);
                 return true;
             }
 
             case IS_FALSE: {
-                ss.Insert(JSONotation_T_::GetFalseString(),
-                          JSONotation_T_::FalseStringLength);
+                ss.Insert(JSONotation_T_::GetFalseString(), JSONotation_T_::FalseStringLength);
                 return true;
             }
 
             case IS_NULL: {
-                ss.Insert(JSONotation_T_::GetNullString(),
-                          JSONotation_T_::NullStringLength);
+                ss.Insert(JSONotation_T_::GetNullString(), JSONotation_T_::NullStringLength);
                 return true;
             }
 
@@ -186,8 +174,7 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_STRING: {
-                return Digit::StringToNumber(value, Z_STRVAL_P(this),
-                                             Z_STRLEN_P(this));
+                return Digit::StringToNumber(value, Z_STRVAL_P(this), Z_STRLEN_P(this));
             }
 
             case IS_TRUE: {
@@ -207,8 +194,7 @@ struct BQ_ZVAL : zval {
         }
     }
 
-    bool GroupBy(zval &groupedValue, const char *key,
-                 const SizeT length) const noexcept {
+    bool GroupBy(zval &groupedValue, const char *key, const SizeT length) const noexcept {
         // It's easier to do it using PHP code.
         (void)groupedValue;
         (void)key;
