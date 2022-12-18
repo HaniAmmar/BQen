@@ -39,9 +39,9 @@ struct BQ_ZVAL : zval {
     }
 
     inline const BQ_ZVAL *GetValue(SizeT index) const {
-        if ((Z_TYPE_P(this) == IS_ARRAY) && (Z_ARRVAL_P(this)->nNumUsed > index)) {
+        if (Size() > index) {
+            // Note: PHP > 8.2.0 uses arPacked
             const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
-
             if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
                 return static_cast<const BQ_ZVAL *>(val);
             }
@@ -63,7 +63,7 @@ struct BQ_ZVAL : zval {
 
             SizeT index;
 
-            if ((Digit::StringToNumber(index, key, length)) && (Z_ARRVAL_P(this)->nNumUsed > index)) {
+            if ((Digit::StringToNumber(index, key, length)) && (Size() > index)) {
                 const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
 
                 if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
@@ -76,8 +76,7 @@ struct BQ_ZVAL : zval {
     }
 
     bool SetKeyCharAndLength(SizeT index, const char *&key, SizeT &length) const noexcept {
-        if ((Z_TYPE_P(this) == IS_ARRAY) && (Z_ARRVAL_P(this)->arData->key != nullptr) &&
-            (Z_ARRVAL_P(this)->nNumUsed > index)) {
+        if ((Size() > index) && (Z_ARRVAL_P(this)->arData->key != nullptr)) {
             const zend_string *val = (Z_ARRVAL_P(this)->arData + index)->key;
 
             key    = val->val;
