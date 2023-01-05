@@ -13,7 +13,7 @@ ZEND_GET_MODULE(bqen)
 PHP_FUNCTION(BQen_Render) {
     using QTagBit = Qentem::Array<Qentem::Template::TagBit<char>>;
 
-    static Qentem::StringStream<char> template_ss;
+    static Qentem::StringStream<char> stream;
     static QTagBit                    tags_cache;
 
     Qentem::SizeT template_str_len = 0;
@@ -25,19 +25,19 @@ PHP_FUNCTION(BQen_Render) {
     Z_PARAM_ZVAL(value)
     ZEND_PARSE_PARAMETERS_END();
 
-    template_ss.Clear();
+    stream.Clear();
     tags_cache.Clear();
 
     if ((template_str_len != 0) && (template_str != nullptr)) {
         if (Z_TYPE_P(value) == IS_ARRAY) {
-            Qentem::Template::Render(template_str, template_str_len, static_cast<const BQen::BQ_ZVAL *>(value),
-                                     &template_ss, &tags_cache);
+            Qentem::Template::Render(template_str, template_str_len, static_cast<const BQen::BQ_ZVAL &>(*value), stream,
+                                     tags_cache);
         } else if (Z_TYPE_P(value) == IS_STRING) {
             const Qentem::Value<char> qval = Qentem::JSON::Parse(Z_STRVAL_P(value), Z_STRLEN_P(value));
 
-            Qentem::Template::Render(template_str, template_str_len, &qval, &template_ss, &tags_cache);
+            Qentem::Template::Render(template_str, template_str_len, qval, stream, tags_cache);
         }
     }
 
-    RETURN_STRINGL(template_ss.First(), template_ss.Length());
+    RETURN_STRINGL(stream.First(), stream.Length());
 }

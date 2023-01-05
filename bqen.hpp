@@ -9,7 +9,7 @@ using StringStream = Qentem::StringStream<char>;
 using Qentem::SizeT;
 
 struct BQ_ZVAL : zval {
-    using JSONotation_T_ = Qentem::JSON::JSONotation<char>;
+    using JSONotation = Qentem::JSON::JSONotation_T_<char>;
 
     inline bool IsArray() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
@@ -97,20 +97,20 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_TRUE: {
-                key    = JSONotation_T_::TrueString;
-                length = JSONotation_T_::TrueStringLength;
+                key    = JSONotation::TrueString;
+                length = JSONotation::TrueStringLength;
                 return true;
             }
 
             case IS_FALSE: {
-                key    = JSONotation_T_::FalseString;
-                length = JSONotation_T_::FalseStringLength;
+                key    = JSONotation::FalseString;
+                length = JSONotation::FalseStringLength;
                 return true;
             }
 
             case IS_NULL: {
-                key    = JSONotation_T_::NullString;
-                length = JSONotation_T_::NullStringLength;
+                key    = JSONotation::NullString;
+                length = JSONotation::NullStringLength;
                 return true;
             }
 
@@ -138,17 +138,17 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_TRUE: {
-                ss.Insert(JSONotation_T_::TrueString, JSONotation_T_::TrueStringLength);
+                ss.Insert(JSONotation::TrueString, JSONotation::TrueStringLength);
                 return true;
             }
 
             case IS_FALSE: {
-                ss.Insert(JSONotation_T_::FalseString, JSONotation_T_::FalseStringLength);
+                ss.Insert(JSONotation::FalseString, JSONotation::FalseStringLength);
                 return true;
             }
 
             case IS_NULL: {
-                ss.Insert(JSONotation_T_::NullString, JSONotation_T_::NullStringLength);
+                ss.Insert(JSONotation::NullString, JSONotation::NullStringLength);
                 return true;
             }
 
