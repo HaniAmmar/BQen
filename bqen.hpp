@@ -97,19 +97,19 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_TRUE: {
-                key    = JSONotation_T_::GetTrueString();
+                key    = JSONotation_T_::TrueString;
                 length = JSONotation_T_::TrueStringLength;
                 return true;
             }
 
             case IS_FALSE: {
-                key    = JSONotation_T_::GetFalseString();
+                key    = JSONotation_T_::FalseString;
                 length = JSONotation_T_::FalseStringLength;
                 return true;
             }
 
             case IS_NULL: {
-                key    = JSONotation_T_::GetNullString();
+                key    = JSONotation_T_::NullString;
                 length = JSONotation_T_::NullStringLength;
                 return true;
             }
@@ -128,27 +128,27 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_LONG: {
-                Digit::NumberToStringStream(ss, Z_LVAL_P(this), 1);
+                Digit::NumberToString(ss, Z_LVAL_P(this));
                 return true;
             }
 
             case IS_DOUBLE: {
-                Digit::NumberToStringStream(ss, Z_DVAL_P(this), 1, 0, 14);
+                Digit::NumberToString(ss, Z_DVAL_P(this), 1, 0, 14);
                 return true;
             }
 
             case IS_TRUE: {
-                ss.Insert(JSONotation_T_::GetTrueString(), JSONotation_T_::TrueStringLength);
+                ss.Insert(JSONotation_T_::TrueString, JSONotation_T_::TrueStringLength);
                 return true;
             }
 
             case IS_FALSE: {
-                ss.Insert(JSONotation_T_::GetFalseString(), JSONotation_T_::FalseStringLength);
+                ss.Insert(JSONotation_T_::FalseString, JSONotation_T_::FalseStringLength);
                 return true;
             }
 
             case IS_NULL: {
-                ss.Insert(JSONotation_T_::GetNullString(), JSONotation_T_::NullStringLength);
+                ss.Insert(JSONotation_T_::NullString, JSONotation_T_::NullStringLength);
                 return true;
             }
 
