@@ -138,6 +138,9 @@ item[0] item[1] item[2] item[3]
 
 echo BQen_Render($template, $list);
 
+// To cache the template for multi-rendering, and a name:
+// echo BQen_Render($template, $list, 'template_1');
+
 ?>
 ```
 
@@ -180,6 +183,9 @@ Not zero or one or two.
 ';
 
 echo BQen_Render($template, $list);
+
+// To cache the template for multi-rendering, and a name:
+// echo BQen_Render($template, $list, 'template_2');
 
 ?>
 ```
@@ -252,6 +258,9 @@ $template = '
 ';
 
 echo BQen_Render($template, json_decode($json_string, true));
+
+// To cache the template for multi-rendering, and a name:
+// echo BQen_Render($template, $list, 'mainpage');
 
 ?>
 ```
