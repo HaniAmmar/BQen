@@ -5,13 +5,13 @@ BQen_Render() tests
 --FILE--
 <?php
 
-$list1 = '{"numbers":[1,2,3,4,5,6,7,8],"eq":"((1+2)^3)/2","qen":"Qentem"}';
+$list1 = '{"numbers":[1,2,3,4,5,6,7,8],"qen":"Qentem"}';
 
 $content1 = '
 <loop set="numbers" value="this_number">
 <if case="(this_number % 2) == 1">this_number is an odd number.</if></loop>
 
-{var:eq} = {math: {var:eq}}
+((1+2)^3)/2 = {math: ((1+2)^3)/2}
 
 (0.1 + 0.2) is {math:   0.1   +   0.2  }
 

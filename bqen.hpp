@@ -75,16 +75,20 @@ struct BQ_ZVAL : zval {
         return nullptr;
     }
 
-    bool SetKeyCharAndLength(SizeT index, const char *&key, SizeT &length) const noexcept {
-        if ((Size() > index) && (Z_ARRVAL_P(this)->arData->key != nullptr)) {
-            const zend_string *val = (Z_ARRVAL_P(this)->arData + index)->key;
+    void SetValueKeyLength(SizeT index, const BQ_ZVAL *&value, const char *&key, SizeT &length) const noexcept {
+        if (Size() > index) {
+            auto        bucket = (Z_ARRVAL_P(this)->arData + index);
+            const zval *val    = &(bucket->val);
 
-            key    = val->val;
-            length = val->len;
-            return true;
+            value = nullptr;
+
+            if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
+                value                  = static_cast<const BQ_ZVAL *>(val);
+                const zend_string *str = bucket->key;
+                key                    = str->val;
+                length                 = str->len;
+            }
         }
-
-        return false;
     }
 
     bool SetCharAndLength(const char *&key, SizeT &length) const noexcept {
