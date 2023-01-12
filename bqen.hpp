@@ -40,7 +40,7 @@ struct BQ_ZVAL : zval {
 
     inline const BQ_ZVAL *GetValue(SizeT index) const {
         if (Size() > index) {
-            // Note: PHP > 8.2.0 uses arPacked
+            // Note: PHP > 8.2.0 uses arPacked (HT_IS_PACKED())
             const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
             if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
                 return static_cast<const BQ_ZVAL *>(val);
@@ -127,7 +127,7 @@ struct BQ_ZVAL : zval {
     bool CopyStringValueTo(StringStream &ss) const noexcept {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
-                ss.Insert(Z_STRVAL_P(this), Z_STRLEN_P(this));
+                ss.Write(Z_STRVAL_P(this), Z_STRLEN_P(this));
                 return true;
             }
 
@@ -142,17 +142,17 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_TRUE: {
-                ss.Insert(JSONotation::TrueString, JSONotation::TrueStringLength);
+                ss.Write(JSONotation::TrueString, JSONotation::TrueStringLength);
                 return true;
             }
 
             case IS_FALSE: {
-                ss.Insert(JSONotation::FalseString, JSONotation::FalseStringLength);
+                ss.Write(JSONotation::FalseString, JSONotation::FalseStringLength);
                 return true;
             }
 
             case IS_NULL: {
-                ss.Insert(JSONotation::NullString, JSONotation::NullStringLength);
+                ss.Write(JSONotation::NullString, JSONotation::NullStringLength);
                 return true;
             }
 
