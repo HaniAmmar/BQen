@@ -36,13 +36,11 @@ A PHP module that uses [Qentem](https://github.com/HaniAmmar/Qentem-Engine) libr
 
 ## Usage
 
-Templates' content should be stored in a string variable, and the substituting values in an array or a JSON string, then pass them to **BQen_Render(string, array|string)** and it will return a string containing the final result.
+Templates' content should be stored in a string variable, and the substituting values in an array or a JSON string, then pass them to **BQen_Render(string, array|string, string?)** and it will return a string containing the final result.
 
 ### Variable
 
 ```php
-<?php
-
 $list = array(
     'v1' => 'Qentem',
     'sub-list1' => array('sv1' => 'BQen'),
@@ -56,15 +54,11 @@ $template = '
 ';
 
 echo BQen_Render($template, $list);
-
-?>
 ```
 
 ### Math
 
 ```php
-<?php
-
 $list = array(
     'Equation' => '1+4*2+1',
     'one'      => '1',
@@ -81,15 +75,11 @@ $template = '
 ';
 
 echo BQen_Render($template, $list);
-
-?>
 ```
 
 ### Inline If
 
 ```php
-<?php
-
 $list = array(
     'one'      => '1',
     'two'      => '2',
@@ -104,15 +94,11 @@ $template = '
 ';
 
 echo BQen_Render($template, $list);
-
-?>
 ```
 
 ### Loop
 
 ```php
-<?php
-
 $list = array(
     'object' =>
             array (
@@ -129,26 +115,21 @@ $list = array(
 
 $template = '
 <loop set="object" value="item">
-item[var1] item[var2] item[var3] item[var4]</loop>
+{var:item[var1]} {var:item[var2]} {var:item[var3]} {var:item[var4]}</loop>
 
 <loop set="array" value="item">
-item[0] item[1] item[2] item[3]
-</loop>
+{var:item[0]} {var:item[1]} {var:item[2]} {var:item[3]}</loop>
 ';
 
 echo BQen_Render($template, $list);
 
 // To cache the template for multi-rendering, and a name:
 // echo BQen_Render($template, $list, 'template_1');
-
-?>
 ```
 
 ### If Condition
 
 ```php
-<?php
-
 $list = array(0,1,2,3);
 
 
@@ -186,8 +167,6 @@ echo BQen_Render($template, $list);
 
 // To cache the template for multi-rendering, and a name:
 // echo BQen_Render($template, $list, 'template_2');
-
-?>
 ```
 
 ## Live Testing
@@ -197,8 +176,6 @@ Templates can be tested live @ [JQen Tool](https://haniammar.github.io/JQen-Tool
 ## Page Example
 
 ```php
-<?php
-
 $json_string = '
 [
     {
@@ -222,29 +199,22 @@ $json_string = '
 
 
 $template = '
-<!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Qentem Example</title>
-</head>
 
 <body>
     <div>
-        <h2>Students</h2>
+        <h2>Students\' list:</h2>
         <loop value="department_val">
-            <h3>Major: department_val[major]</h3>
+            <h3>Major: {var:department_val[major]}</h3>
             <ul>
             <loop set="department_val[students]" value="student_val">
                 <li>
-                    <span>Name: student_val[Name]</span>
+                    <span>Name: {var:student_val[Name]</span>
                     <span>
-                        GPA: student_val[GPA]
-                        <if case="student_val[GPA] < 2.5"> (Inform adviser!)
-                        <elseif case="student_val[GPA] >= 3.5" /> (President\'s List!)
-                        <elseif case="student_val[GPA] >= 3.0" /> (Dean\'s List!)
+                        GPA: {var:student_val[GPA]}
+                        <if case="{var:student_val[GPA]} < 2.5"> (Inform adviser!)
+                        <elseif case="{var:student_val[GPA]} >= 3.5" /> (President\'s List!)
+                        <elseif case="{var:student_val[GPA]} >= 3.0" /> (Dean\'s List!)
                         </if>
                     </span>
                 </li>
@@ -261,8 +231,6 @@ echo BQen_Render($template, json_decode($json_string, true));
 
 // To cache the template for multi-rendering, and a name:
 // echo BQen_Render($template, $list, 'mainpage');
-
-?>
 ```
 
 ## Reference

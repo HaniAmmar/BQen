@@ -23,8 +23,8 @@ $list2 = array(
     5 =>  null,
 );
 
-$content4 = '<loop value="[val]">
-[val]</loop>';
+$content4 = '<loop value="val">
+{var:val}</loop>';
 
 echo BQen_Render($content4, $list1). "\n";
 echo BQen_Render($content4, $list2). "\n";

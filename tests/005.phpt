@@ -9,7 +9,7 @@ $list1 = '{"numbers":[1,2,3,4,5,6,7,8],"qen":"Qentem"}';
 
 $content1 = '
 <loop set="numbers" value="this_number">
-<if case="(this_number % 2) == 1">this_number is an odd number.</if></loop>
+<if case="({var:this_number} % 2) == 1">{var:this_number} is an odd number.</if></loop>
 
 ((1+2)^3)/2 = {math: ((1+2)^3)/2}
 

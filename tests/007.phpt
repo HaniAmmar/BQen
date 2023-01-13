@@ -22,11 +22,11 @@ $list5 = array(
     )
 );
 
-$content8 = '<loop set="list1[item1]" value="[val]">
-[val]</loop>';
+$content8 = '<loop set="list1[item1]" value="val">
+{var:val}</loop>';
 
-$content9 = '<loop set="list1[item2]" value="[val]">
-[val]</loop>';
+$content9 = '<loop set="list1[item2]" value="val">
+{var:val}</loop>';
 
 echo BQen_Render($content8, $list5). "\n";
 echo BQen_Render($content9, $list5). "\n";
