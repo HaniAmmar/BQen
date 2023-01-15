@@ -9,7 +9,7 @@ using StringStream = Qentem::StringStream<char>;
 using Qentem::SizeT;
 
 struct BQ_ZVAL : zval {
-    using JSONotation = Qentem::JSON::JSONotation_T_<char>;
+    using JSONotation = Qentem::JSONotation_T_<char>;
 
     inline bool IsArray() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
@@ -29,6 +29,25 @@ struct BQ_ZVAL : zval {
 
     inline bool IsString() const noexcept { return (Z_TYPE_P(this) == IS_STRING); }
     inline bool IsNumber() const noexcept { return ((Z_TYPE_P(this) == IS_LONG) || (Z_TYPE_P(this) == IS_DOUBLE)); }
+
+    inline unsigned int GetNumberType() const noexcept {
+        switch (Z_TYPE_P(this)) {
+            case IS_LONG: {
+                if (Z_LVAL_P(this) >= 0) {
+                    return 1U;
+                }
+
+                return 2U;
+            }
+
+            case IS_DOUBLE: {
+                return 3U;
+            }
+
+            default:
+                return 0;
+        }
+    }
 
     inline SizeT Size() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
