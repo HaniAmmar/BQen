@@ -1,12 +1,12 @@
-#ifndef PHP_BQEN_H_
-#define PHP_BQEN_H_
+#ifndef _PHP_BQEN_H
+#define _PHP_BQEN_H
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #define PHP_BQEN_EXTNAME "BQen"
-#define PHP_BQEN_VERSION "2.0.1"
+#define PHP_BQEN_VERSION "2.2.3"
 
 #define QENTEM_AVX2 1
 #define QENTEM_SSE2 1

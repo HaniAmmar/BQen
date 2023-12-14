@@ -1,15 +1,18 @@
-#ifndef QENTEM_BQEN_H_
-#define QENTEM_BQEN_H_
+#ifndef _QENTEM_BQEN_H
+#define _QENTEM_BQEN_H
 
 namespace BQen {
 
-using Digit        = Qentem::Digit<char>;
-using String       = Qentem::String<char>;
-using StringStream = Qentem::StringStream<char>;
+using Digit = Qentem::Digit;
+
+using Qentem::QNumber64;
+using Qentem::QNumberType;
 using Qentem::SizeT;
+using Qentem::SizeT32;
+using Qentem::SizeT64;
 
 struct BQ_ZVAL : zval {
-    using JSONotation = Qentem::JSONotation_T_<char>;
+    using JSONotation = Qentem::_JSONotation_T<char>;
 
     inline bool IsArray() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
@@ -27,31 +30,16 @@ struct BQ_ZVAL : zval {
         return false;
     }
 
-    inline bool IsString() const noexcept { return (Z_TYPE_P(this) == IS_STRING); }
-    inline bool IsNumber() const noexcept { return ((Z_TYPE_P(this) == IS_LONG) || (Z_TYPE_P(this) == IS_DOUBLE)); }
-
-    inline unsigned int GetNumberType() const noexcept {
-        switch (Z_TYPE_P(this)) {
-            case IS_LONG: {
-                if (Z_LVAL_P(this) >= 0) {
-                    return 1U;
-                }
-
-                return 2U;
-            }
-
-            case IS_DOUBLE: {
-                return 3U;
-            }
-
-            default:
-                return 0;
-        }
+    inline bool IsString() const noexcept {
+        return (Z_TYPE_P(this) == IS_STRING);
+    }
+    inline bool IsNumber() const noexcept {
+        return ((Z_TYPE_P(this) == IS_LONG) || (Z_TYPE_P(this) == IS_DOUBLE));
     }
 
     inline SizeT Size() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
-            return Z_ARRVAL_P(this)->nNumUsed;
+            return Z_ARRVAL_P(this)->nNumOfElements;
         }
 
         return 0;
@@ -59,8 +47,9 @@ struct BQ_ZVAL : zval {
 
     inline const BQ_ZVAL *GetValue(SizeT index) const {
         if (Size() > index) {
-            // Note: PHP > 8.2.0 uses arPacked (HT_IS_PACKED())
+            // Note: PHP > 8.2 uses arPacked (HT_IS_PACKED())
             const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
+
             if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
                 return static_cast<const BQ_ZVAL *>(val);
             }
@@ -81,8 +70,9 @@ struct BQ_ZVAL : zval {
             }
 
             SizeT index;
+            Digit::FastStringToNumber(index, key, length);
 
-            if ((Digit::StringToNumber(index, key, length)) && (Size() > index)) {
+            if (index < Size()) {
                 const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
 
                 if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
@@ -143,35 +133,36 @@ struct BQ_ZVAL : zval {
         }
     }
 
-    bool CopyStringValueTo(StringStream &ss) const noexcept {
+    template <typename _StringStream_T>
+    bool CopyValueTo(_StringStream_T &stream, SizeT32 precision = Qentem::Config::DoublePrecision) const {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
-                ss.Write(Z_STRVAL_P(this), Z_STRLEN_P(this));
+                stream.Write(Z_STRVAL_P(this), Z_STRLEN_P(this));
                 return true;
             }
 
             case IS_LONG: {
-                Digit::NumberToString(ss, Z_LVAL_P(this));
+                Digit::NumberToString(stream, Z_LVAL_P(this));
                 return true;
             }
 
             case IS_DOUBLE: {
-                Digit::NumberToString(ss, Z_DVAL_P(this), 1, 0, 14);
+                Digit::NumberToString(stream, Z_DVAL_P(this), precision);
                 return true;
             }
 
             case IS_TRUE: {
-                ss.Write(JSONotation::TrueString, JSONotation::TrueStringLength);
+                stream.Write(JSONotation::TrueString, JSONotation::TrueStringLength);
                 return true;
             }
 
             case IS_FALSE: {
-                ss.Write(JSONotation::FalseString, JSONotation::FalseStringLength);
+                stream.Write(JSONotation::FalseString, JSONotation::FalseStringLength);
                 return true;
             }
 
             case IS_NULL: {
-                ss.Write(JSONotation::NullString, JSONotation::NullStringLength);
+                stream.Write(JSONotation::NullString, JSONotation::NullStringLength);
                 return true;
             }
 
@@ -181,36 +172,60 @@ struct BQ_ZVAL : zval {
         }
     }
 
-    template <typename Number_T_>
-    bool SetNumber(Number_T_ &value) const noexcept {
+    inline QNumberType GetNumberType() const noexcept {
         switch (Z_TYPE_P(this)) {
             case IS_LONG: {
-                value = static_cast<Number_T_>(Z_LVAL_P(this));
-                return true;
+                if (Z_LVAL_P(this) >= 0) {
+                    return QNumberType::Natural;
+                }
+
+                return QNumberType::Integer;
             }
 
             case IS_DOUBLE: {
-                value = static_cast<Number_T_>(Z_DVAL_P(this));
-                return true;
+                return QNumberType::Real;
+            }
+
+            default:
+                return QNumberType::NotANumber;
+        }
+    }
+
+    QNumberType SetNumber(QNumber64 &value) const noexcept {
+        switch (Z_TYPE_P(this)) {
+            case IS_LONG: {
+                value = QNumber64(Z_LVAL_P(this));
+
+                if (Z_LVAL_P(this) >= 0) {
+                    return QNumberType::Natural;
+                }
+
+                return QNumberType::Integer;
+            }
+
+            case IS_DOUBLE: {
+                value = QNumber64(Z_DVAL_P(this));
+                return QNumberType::Real;
             }
 
             case IS_STRING: {
-                return Digit::StringToNumber(value, Z_STRVAL_P(this), Z_STRLEN_P(this));
+                size_t offset = 0;
+                return Digit::StringToNumber(value, Z_STRVAL_P(this), offset, Z_STRLEN_P(this));
             }
 
             case IS_TRUE: {
-                value = 1;
-                return true;
+                value = QNumber64{1};
+                return QNumberType::Natural;
             }
 
             case IS_NULL:
             case IS_FALSE: {
-                value = 0;
-                return true;
+                value = QNumber64{0};
+                return QNumberType::Natural;
             }
 
             default: {
-                return false;
+                return QNumberType::NotANumber;
             }
         }
     }

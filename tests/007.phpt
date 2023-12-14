@@ -16,7 +16,7 @@ $list5 = array(
         "item2"=> array(
             "subItem1"=> 1,
             "subItem2"=> 0,
-            "subItem3"=> 5,
+            "subItem3"=> 5.5,
             "subItem4"=> 7,
         )
     )
@@ -41,5 +41,5 @@ null
 
 1
 0
-5
+5.5
 7
