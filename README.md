@@ -59,18 +59,18 @@ echo BQen_Render($template, $list);
 
 ```php
 $list = array(
-    'Equation' => '1+4*2+1',
-    'one'      => '1',
-    'three'    => '3'
+    'one'      => 1,
+    'two'      => 2,
+    'three'    => 3,
+    'four'     => 4,
 );
 
 $template = '
-0.1+0.2 is: {math: 0.1  +   0.2 }
-{var:Equation} = {math:{var:Equation}}; (1+8+1)
-6^2 = {math:6^2}
---1 = {math:--1}
-{var:one}+{var:three} = {math:{var:one}+{var:three}}
-9 % 5 = {math:9 % 5}
+<div>0.1+0.2 is: {math: 0.1  +   0.2 }</div>
+<div>{var:one}+{var:four}*{var:two}+{var:one} = {math:{var:one}+{var:four}*{var:two}+{var:one}}; (1+8+1)</div>
+<div>6^2 = {math:6^2}</div>
+<div>{var:one}+{var:three} = {math:{var:one}+{var:three}}</div>
+<div>9 % 5 = {math:9 % 5}</div>
 ';
 
 echo BQen_Render($template, $list);
