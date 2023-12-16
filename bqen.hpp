@@ -19,19 +19,11 @@ struct BQ_ZVAL : zval {
     using JSONotation = Qentem::_JSONotation_T<char>;
 
     inline bool IsArray() const noexcept {
-        if (Z_TYPE_P(this) == IS_ARRAY) {
-            return (Z_ARRVAL_P(this)->arData->key == nullptr);
-        }
-
-        return false;
+        return ((Z_TYPE_P(this) == IS_ARRAY) && (HT_IS_PACKED(Z_ARRVAL_P(this))));
     }
 
     inline bool IsObject() const noexcept {
-        if (Z_TYPE_P(this) == IS_ARRAY) {
-            return (Z_ARRVAL_P(this)->arData->key != nullptr);
-        }
-
-        return false;
+        return ((Z_TYPE_P(this) == IS_ARRAY) && (!HT_IS_PACKED(Z_ARRVAL_P(this))));
     }
 
     inline bool IsString() const noexcept {
@@ -50,9 +42,14 @@ struct BQ_ZVAL : zval {
     }
 
     inline const BQ_ZVAL *GetValue(SizeT index) const {
-        if (Size() > index) {
-            // Note: PHP > 8.2 uses arPacked (HT_IS_PACKED())
-            const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
+        if (index < Size()) {
+            const zval *val = nullptr;
+
+            if (IsArray()) {
+                val = ((Z_ARRVAL_P(this)->arPacked + index));
+            } else if (IsObject()) {
+                val = &((Z_ARRVAL_P(this)->arData + index)->val);
+            }
 
             if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
                 return static_cast<const BQ_ZVAL *>(val);
@@ -63,33 +60,28 @@ struct BQ_ZVAL : zval {
     }
 
     const BQ_ZVAL *GetValue(const char *key, SizeT length) const {
-        if (Z_TYPE_P(this) == IS_ARRAY) {
-            if (Z_ARRVAL_P(this)->arData->key != nullptr) {
-                const zval *val = zend_hash_str_find(Z_ARRVAL_P(this), key, length);
-                if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
-                    return static_cast<const BQ_ZVAL *>(val);
-                }
+        const zval *val = nullptr;
 
-                return nullptr;
-            }
-
+        if (IsArray()) {
             SizeT index;
             Digit::FastStringToNumber(index, key, length);
 
             if (index < Size()) {
-                const zval *val = &((Z_ARRVAL_P(this)->arData + index)->val);
-
-                if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
-                    return static_cast<const BQ_ZVAL *>(val);
-                }
+                val = ((Z_ARRVAL_P(this)->arPacked + index));
             }
+        } else if (IsObject()) {
+            val = zend_hash_str_find(Z_ARRVAL_P(this), key, length);
+        }
+
+        if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
+            return static_cast<const BQ_ZVAL *>(val);
         }
 
         return nullptr;
     }
 
     void SetValueKeyLength(SizeT index, const BQ_ZVAL *&value, const char *&key, SizeT &length) const noexcept {
-        if (Size() > index) {
+        if (index < Size()) {
             auto        bucket = (Z_ARRVAL_P(this)->arData + index);
             const zval *val    = &(bucket->val);
 

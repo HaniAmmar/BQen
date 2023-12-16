@@ -14,7 +14,7 @@ if "%PHP_CONFIG%" equ "" (
 )
 
 @REM PHP version number
-if "%PHP_VER%" equ ""        set PHP_VER=7.4.3
+if "%PHP_VER%" equ ""        set PHP_VER=8.2.0
 if "%PHP_SDK_VER%" equ ""    set PHP_SDK_VER=2.2.0
 @REM Set to zero to disable Thread safe
 if "%PHP_IS_TS%" equ ""      set PHP_IS_TS=1

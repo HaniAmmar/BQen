@@ -239,7 +239,7 @@ Syntax @ [Qentem-Engine/Template.md](https://github.com/HaniAmmar/Qentem-Engine/
 ## Requirements
 
 -   C++ 11+ compiler
--   PHP 7+
+-   PHP 8.2+
 
 ## Building
 
