@@ -35,7 +35,7 @@ PHP_FUNCTION(BQen_Render) {
     stream.Clear();
 
     if (template_name_len != 0) {
-        tags = &(cache.GetOrAdd(template_name, template_name_len));
+        tags = &(cache.Get(template_name, template_name_len));
     } else {
         tags_cache.Clear();
         tags = &tags_cache;

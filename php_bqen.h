@@ -18,9 +18,6 @@ namespace Qentem {
 using SizeT = size_t;
 }
 
-#include <new>
-#include "JSON.hpp"
-#include "Template.hpp"
 #include "bqen.hpp"
 
 extern zend_module_entry bqen_module_entry;

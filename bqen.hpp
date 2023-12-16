@@ -1,3 +1,7 @@
+#include <new>
+#include "JSON.hpp"
+#include "Template.hpp"
+
 #ifndef _QENTEM_BQEN_H
 #define _QENTEM_BQEN_H
 
@@ -134,10 +138,19 @@ struct BQ_ZVAL : zval {
     }
 
     template <typename _StringStream_T>
-    bool CopyValueTo(_StringStream_T &stream, SizeT32 precision = Qentem::Config::DoublePrecision) const {
+    using _CopyValueToStringFunction_T = void(_StringStream_T, const char *, SizeT);
+
+    template <typename _StringStream_T, typename _StringFunction_T = _CopyValueToStringFunction_T<_StringStream_T>>
+    bool CopyValueTo(_StringStream_T &stream, SizeT32 precision = Qentem::Config::DoublePrecision,
+                     _StringFunction_T *string_function = nullptr) const {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
-                stream.Write(Z_STRVAL_P(this), Z_STRLEN_P(this));
+                if (string_function != nullptr) {
+                    string_function(stream, Z_STRVAL_P(this), SizeT(Z_STRLEN_P(this)));
+                } else {
+                    stream.Write(Z_STRVAL_P(this), SizeT(Z_STRLEN_P(this)));
+                }
+
                 return true;
             }
 
