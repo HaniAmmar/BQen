@@ -16,7 +16,7 @@ using Qentem::SizeT32;
 using Qentem::SizeT64;
 
 struct BQ_ZVAL : zval {
-    using JSONotation = Qentem::_JSONotation_T<char>;
+    using JSONotation = Qentem::JSONotation_T<char>;
 
     inline bool IsArray() const noexcept {
         return ((Z_TYPE_P(this) == IS_ARRAY) && (HT_IS_PACKED(Z_ARRVAL_P(this))));
@@ -129,12 +129,12 @@ struct BQ_ZVAL : zval {
         }
     }
 
-    template <typename _StringStream_T>
-    using _CopyValueToStringFunction_T = void(_StringStream_T, const char *, SizeT);
+    template <typename StringStream_T>
+    using CopyValueToStringFunction_T = void(StringStream_T, const char *, SizeT);
 
-    template <typename _StringStream_T, typename _StringFunction_T = _CopyValueToStringFunction_T<_StringStream_T>>
-    bool CopyValueTo(_StringStream_T &stream, SizeT32 precision = Qentem::Config::DoublePrecision,
-                     _StringFunction_T *string_function = nullptr) const {
+    template <typename StringStream_T, typename StringFunction_T = CopyValueToStringFunction_T<StringStream_T>>
+    bool CopyValueTo(StringStream_T &stream, SizeT32 precision = Qentem::Config::DoublePrecision,
+                     StringFunction_T *string_function = nullptr) const {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
                 if (string_function != nullptr) {
