@@ -13,10 +13,7 @@
 
 #include <php.h>
 
-#define QENTEM_SIZE_T
-namespace Qentem {
-using SizeT = size_t;
-}
+#define QENTEM_SIZE_T size_t
 
 #include "bqen.hpp"
 
