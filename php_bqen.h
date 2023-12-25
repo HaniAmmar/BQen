@@ -6,7 +6,7 @@
 #endif
 
 #define PHP_BQEN_EXTNAME "BQen"
-#define PHP_BQEN_VERSION "2.2.4"
+#define PHP_BQEN_VERSION "2.2.6"
 
 #define QENTEM_AVX2 1
 #define QENTEM_SSE2 1
