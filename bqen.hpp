@@ -29,6 +29,7 @@ struct BQ_ZVAL : zval {
     inline bool IsString() const noexcept {
         return (Z_TYPE_P(this) == IS_STRING);
     }
+
     inline bool IsNumber() const noexcept {
         return ((Z_TYPE_P(this) == IS_LONG) || (Z_TYPE_P(this) == IS_DOUBLE));
     }
@@ -36,6 +37,14 @@ struct BQ_ZVAL : zval {
     inline SizeT Size() const noexcept {
         if (Z_TYPE_P(this) == IS_ARRAY) {
             return Z_ARRVAL_P(this)->nNumOfElements;
+        }
+
+        return 0;
+    }
+
+    inline SizeT Length() const noexcept {
+        if (Z_TYPE_P(this) == IS_STRING) {
+            return Z_STRLEN_P(this);
         }
 
         return 0;
@@ -138,9 +147,9 @@ struct BQ_ZVAL : zval {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
                 if (string_function != nullptr) {
-                    string_function(stream, Z_STRVAL_P(this), SizeT(Z_STRLEN_P(this)));
+                    string_function(stream, Z_STRVAL_P(this), Z_STRLEN_P(this));
                 } else {
-                    stream.Write(Z_STRVAL_P(this), SizeT(Z_STRLEN_P(this)));
+                    stream.Write(Z_STRVAL_P(this), Z_STRLEN_P(this));
                 }
 
                 return true;
