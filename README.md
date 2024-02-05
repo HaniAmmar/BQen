@@ -139,25 +139,25 @@ Zero!
 
 <if case="{var:1} == 0">
 Zero!
-<else />
+<else>
 Not {var:0} but {var:1}.
 </if>
 
 <if case="{var:2} == 0">
 Zero!
-<elseif case="{var:2} == 2" />
+<else if case="{var:2} == 2">
 Two!
-<else />
+<else>
 Not zero or one.
 </if>
 
 <if case="{var:2} == 0">
 Zero!
-<elseif case="{var:2} == 5" />
+<else if case="{var:2} == 5">
 Two!
-<elseif case="{var:3} == 3" />
+<else if case="{var:3} == 3">
 {var:3}
-<else />
+<else>
 Not zero or one or two.
 </if>
 ';
@@ -212,8 +212,8 @@ $template = '
                     <span>
                         GPA: {var:student_val[GPA]}
                         <if case="{var:student_val[GPA]} < 2.5"> (Inform adviser!)
-                        <elseif case="{var:student_val[GPA]} >= 3.5" /> (President\'s List!)
-                        <elseif case="{var:student_val[GPA]} >= 3.0" /> (Dean\'s List!)
+                        <else if case="{var:student_val[GPA]} >= 3.5"> (President\'s List!)
+                        <else if case="{var:student_val[GPA]} >= 3.0"> (Dean\'s List!)
                         </if>
                     </span>
                 </li>
@@ -260,7 +260,7 @@ After that, add `extension=bqen.so` to php.ini or place it in its own file in `p
 
 > MIT License
 >
-> Copyright (c) 2020 Hani Ammar
+> Copyright (c) 2024 Hani Ammar
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal
