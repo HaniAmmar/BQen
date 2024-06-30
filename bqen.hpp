@@ -1,6 +1,7 @@
 #include <new>
 #include "JSON.hpp"
 #include "Template.hpp"
+#include "StringView.hpp"
 
 #ifndef _QENTEM_BQEN_H
 #define _QENTEM_BQEN_H
@@ -101,6 +102,21 @@ struct BQ_ZVAL : zval {
                 const zend_string *str = bucket->key;
                 key                    = str->val;
                 length                 = str->len;
+            }
+        }
+    }
+
+    void SetValueKeyLength(SizeT index, const BQ_ZVAL *&value, StringView<char> *&key) const noexcept {
+        if (index < Size()) {
+            auto        bucket = (Z_ARRVAL_P(this)->arData + index);
+            const zval *val    = &(bucket->val);
+
+            value = nullptr;
+
+            if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
+                value                  = static_cast<const BQ_ZVAL *>(val);
+                const zend_string *str = bucket->key;
+                key                    = StringView<Char_T>{str->val, str->len};
             }
         }
     }
