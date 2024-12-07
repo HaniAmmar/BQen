@@ -17,7 +17,7 @@ using Qentem::SizeT32;
 using Qentem::SizeT64;
 
 struct BQ_ZVAL : zval {
-    using JSONotation = Qentem::JSONotation_T<char>;
+    using JSONotation = Qentem::JSONUtils::JSONotation_T<char>;
 
     inline bool IsArray() const noexcept {
         return ((Z_TYPE_P(this) == IS_ARRAY) && (HT_IS_PACKED(Z_ARRVAL_P(this))));
@@ -90,37 +90,6 @@ struct BQ_ZVAL : zval {
         return nullptr;
     }
 
-    void SetValueKeyLength(SizeT index, const BQ_ZVAL *&value, const char *&key, SizeT &length) const noexcept {
-        if (index < Size()) {
-            auto        bucket = (Z_ARRVAL_P(this)->arData + index);
-            const zval *val    = &(bucket->val);
-
-            value = nullptr;
-
-            if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
-                value                  = static_cast<const BQ_ZVAL *>(val);
-                const zend_string *str = bucket->key;
-                key                    = str->val;
-                length                 = str->len;
-            }
-        }
-    }
-
-    void SetValueKeyLength(SizeT index, const BQ_ZVAL *&value, StringView<char> *&key) const noexcept {
-        if (index < Size()) {
-            auto        bucket = (Z_ARRVAL_P(this)->arData + index);
-            const zval *val    = &(bucket->val);
-
-            value = nullptr;
-
-            if ((val != nullptr) && (Z_TYPE_P(val) != IS_UNDEF)) {
-                value                  = static_cast<const BQ_ZVAL *>(val);
-                const zend_string *str = bucket->key;
-                key                    = StringView<Char_T>{str->val, str->len};
-            }
-        }
-    }
-
     bool SetCharAndLength(const char *&key, SizeT &length) const noexcept {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
@@ -154,12 +123,25 @@ struct BQ_ZVAL : zval {
         }
     }
 
+    void SetValueAndKey(SizeT index, const BQ_ZVAL *&value, Qentem::StringView<char> &key) const noexcept {
+        if (IsObject()) {
+            const zval *item = &((Z_ARRVAL_P(this)->arData + index)->val);
+            value            = nullptr;
+
+            if ((item != nullptr) && (Z_TYPE_P(item) != IS_UNDEF)) {
+                value = static_cast<const BQ_ZVAL *>(item);
+                key   = Qentem::StringView<char>{Z_STRVAL_P(this), Z_STRLEN_P(this)};
+            }
+        }
+    }
+
     template <typename StringStream_T>
     using CopyValueToStringFunction_T = void(StringStream_T, const char *, SizeT);
 
     template <typename StringStream_T, typename StringFunction_T = CopyValueToStringFunction_T<StringStream_T>>
-    bool CopyValueTo(StringStream_T &stream, SizeT32 precision = Qentem::Config::DoublePrecision,
-                     StringFunction_T *string_function = nullptr) const {
+    bool CopyValueTo(StringStream_T             &stream,
+                     const Digit::RealFormatInfo format = Digit::RealFormatInfo{Qentem::Config::DoublePrecision},
+                     StringFunction_T           *string_function = nullptr) const {
         switch (Z_TYPE_P(this)) {
             case IS_STRING: {
                 if (string_function != nullptr) {
@@ -177,7 +159,7 @@ struct BQ_ZVAL : zval {
             }
 
             case IS_DOUBLE: {
-                Digit::NumberToString(stream, Z_DVAL_P(this), precision);
+                Digit::NumberToString(stream, Z_DVAL_P(this), format);
                 return true;
             }
 

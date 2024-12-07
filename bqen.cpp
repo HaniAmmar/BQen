@@ -12,7 +12,7 @@ ZEND_GET_MODULE(bqen)
 
 PHP_FUNCTION(BQen_Render) {
     using QTagBit = Qentem::Array<Qentem::Tags::TagBit>;
-    using QHArray = Qentem::HArray<QTagBit, char>;
+    using QHArray = Qentem::HArray<Qentem::String<char>, QTagBit>;
 
     static QHArray                    cache;
     static Qentem::StringStream<char> stream;
